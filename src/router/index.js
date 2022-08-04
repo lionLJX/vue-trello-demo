@@ -2,14 +2,15 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 import Login from '../components/login'
-import Main from '../components/main/main'
+import Home from '../components/Home/home'
 
-
-Vue.use(Router)
+console.log(Home);
+console.log(Login);
+Vue.use(Router);
 
 const routes = [
   {
-    path : '',
+    path : '/',
     redirect: '/login'
   },
   {
@@ -17,8 +18,8 @@ const routes = [
     component: Login
   },
   {
-    path : '/main',
-    component : Main
+    path : '/home',
+    component : Home
   }
 
 ]
@@ -26,6 +27,18 @@ const router = new Router({
   routes,
   mode: 'history',
   linkActiveClass: 'active'
+})
+
+router.beforeEach((to, from, next) => {
+
+  //直接靠url跳转到其他页面，如果没有登录，将自动跳转
+  //到登录页面
+
+  if (window.sessionStorage.getItem('username') === 'vip@163.com') {
+    if (to.path = '/login') {return next('/login');}
+    return next();
+  }
+  next();
 })
 
 export default router

@@ -1,12 +1,13 @@
 <template>
   <div id="app">
-
+    <router-link to="/home"></router-link>
     <router-view/>
   </div>
 </template>
 
 <script>
-import Login from './components/login'
+
+
 
 
 export default {
