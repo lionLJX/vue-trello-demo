@@ -38,7 +38,7 @@ export default {
     margin : 0 auto;
 }
 .card {
-    display: inline-block;
+
     float: left;
     width: 320px;
     margin-right: 20px;

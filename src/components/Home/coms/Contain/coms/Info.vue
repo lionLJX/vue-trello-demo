@@ -39,7 +39,6 @@ export default {
             if(this.content == '')return ;
 
             this.todoData.unshift({
-                id : 2,
                 content : this.content
             })
             this.content = ''
