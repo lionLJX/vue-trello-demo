@@ -68,9 +68,10 @@
 
 
 <script >
+window.sessionStorage.setItem('status', 0);
 
 export default {
-    name : "login",
+    name : 'login',
     data(){
         return {
         useremail : '',
@@ -82,7 +83,9 @@ export default {
         // 单用户登录功能，只有输入无误才可登录
             if (this.useremail == 'vip@163.com' && this.userpassword == 'vip') {
                 console.log('用户信息无误');
-                this.$router.push('/main');
+                window.sessionStorage.setItem('useremail', 'vip@163.com');
+                window.sessionStorage.setItem('userpassword', 'vip');
+                this.$router.push('/home');
             }
             else {
                 alert('无此用户，请重新输入');
@@ -94,7 +97,13 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+body{
+    background-image: url('../../static/login-bgi.jpg');
+    background-size: 100%;
+    background-repeat: no-repeat;
+}
 
 #login img {
     display: block;
