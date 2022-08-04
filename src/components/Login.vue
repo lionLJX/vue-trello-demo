@@ -4,11 +4,11 @@
         <div class="inner-login">
             <div class="title">登录到Trello</div>
             <div class="login-input-container">
-                <form id="login-form">
+                <form id="login-form" action="" target="the_iframe">
                     <div class="login-input">
-                        <input type="text" name="user-email" class="login-email" placeholder="输入电子邮件">
-                        <input type="password" name="password" class="login-password" placeholder="输入密码">
-                        <input type="submit" class="login-submit" value="登录">
+                        <input type="text" name="user-email" class="login-email" placeholder="输入电子邮件" v-model="useremail">
+                        <input type="password" name="password" class="login-password" placeholder="输入密码" v-model="userpassword">
+                        <input type="submit" class="login-submit" value="登录" v-on:click="submit">
                     </div>
                     <hr class="hr">
                     <ul class="login-link">
@@ -18,6 +18,7 @@
                         </li>
                     </ul>
                 </form>
+                <iframe id="is_iframe" name="the_iframe" style="display:none;"></iframe>
             </div>
         </div>
         <ul class="login-link login-ul">
@@ -70,16 +71,30 @@
 
 export default {
     name : "login",
-
+    data(){
+        return {
+        useremail : '',
+        userpassword : ''
+        }
+    },
+    methods: {
+        submit : function() {
+        // 单用户登录功能，只有输入无误才可登录
+            if (this.useremail == 'vip@163.com' && this.userpassword == 'vip') {
+                console.log('用户信息无误');
+                this.$router.push('/main');
+            }
+            else {
+                alert('无此用户，请重新输入');
+                this.userpassword = '';
+                this.useremail = '';
+            }
+        }
+    }
 }
 </script>
 
 <style>
-body {
-    background-image: url('../../static/login-bgi.jpg');
-    background-size: 100%;
-    background-repeat: no-repeat;
-}
 
 #login img {
     display: block;
@@ -173,11 +188,6 @@ li{
     list-style: none;
 }
 
-ul,
-li {
-    margin: 0;
-    padding: 0;
-}
 
 .logo-small {
     width: 150px;
