@@ -99,7 +99,7 @@ export default {
 
 <style scoped>
 
-body{
+body {
     background-image: url('../../static/login-bgi.jpg');
     background-size: 100%;
     background-repeat: no-repeat;
