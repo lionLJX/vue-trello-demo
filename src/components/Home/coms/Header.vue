@@ -3,7 +3,7 @@
         <div class="contain-img">
             <img src="../../../../static/trello-logo-blue.svg" alt="logo">
         </div>
-        <div class="contain-out"><div class="login-out">退出登录</div>
+        <div class="contain-out"><div class="login-out" @click="loginOut">退出登录</div>
         </div>
 
     </div>
@@ -11,7 +11,14 @@
 
 <script>
 export default {
-    name : 'Header'
+    name : 'Header',
+    methods : {
+        loginOut() {
+            window.sessionStorage.removeItem('useremail');
+            window.sessionStorage.removeItem('userpassword');
+            this.$router.push('/login');
+        }
+    }
 }
 </script>
 
