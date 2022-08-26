@@ -1,6 +1,6 @@
 <template>
     <div class="Main">
-        <div class="card waiting-item">
+        <!-- <div class="card waiting-item">
             <div class="card-header">待办</div>
             <div class="card-add">
                 <main-info></main-info></div>
@@ -12,32 +12,44 @@
         <div class="card finish">
             <div class="card-header">已完成</div>
             <div class="card-add"><main-info></main-info></div>
-        </div>
+        </div> -->
+        <main-info title="待办" :todoList="todoWait"></main-info>
+        <main-info title="进行中" :todoList="todoDoing"></main-info>
+        <main-info title="完成" :todoList="todoFinish"></main-info>
     </div>
 </template>
 
 <script>
-import Info from '../Contain/coms/Info.vue'
+import MainInfo from '../components/coms/Info.vue'
 
 export default {
     name: 'Main',
     components : {
-        MainInfo : Info
+        MainInfo
     },
-        methods : {
-        additem(){
-            
+    data() {
+        return {
+            todoWait : [],
+            todoDoing : [],
+            todoFinish : [],
         }
+    },
+    mounted() {
+        this.$store.dispatch('updateVal')
+        // this.todoWait = this.$store.state.todoWait
+        // this.todoDoing = this.$store.state.todoDoing
+        // this.todoFinish = this.$store.state.todoFinish
     }
 }
 </script>
 
 <style scoped>
 .Main {
-    width: 1020px;
+    display: flex;
+    justify-content: space-around;
     margin : 0 auto;
 }
-.card {
+/* .card {
 
     float: left;
     width: 320px;
@@ -60,5 +72,5 @@ export default {
 
 .card-add {
     background-color: rgb(234, 235, 240);
-}
+} */
 </style>

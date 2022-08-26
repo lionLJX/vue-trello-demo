@@ -7,14 +7,16 @@
 </template>
 
 <script>
-import Header from './coms/Header.vue'
-import Main  from './coms/Contain/Main.vue'
+import HomeHeader from '../components/Header.vue'
+import HomeMain  from '../components/Main.vue'
+
+// console.log(HomeHeader)
 
 export default {
     name: 'Home',
     components : {
-        HomeHeader : Header,
-        HomeMain : Main
+        HomeHeader,
+        HomeMain
     }
 }
 
@@ -22,6 +24,6 @@ export default {
 
 <style>
 body {
-    background-color: lightblue;
+    background-color: #0078c0;
 }
 </style>
