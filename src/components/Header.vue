@@ -1,7 +1,7 @@
 <template>
     <div class="home-header">
         <div class="contain-img">
-            <img src="../../../../static/trello-logo-blue.svg" alt="logo">
+            <img src="../../static/trello-logo-blue.svg" alt="logo">
         </div>
         <div class="contain-out"><div class="login-out" @click="loginOut">退出登录</div>
         </div>
@@ -48,6 +48,7 @@ export default {
     text-align: center;
     height: 100%;
     margin-right: 60px;
+    cursor: pointer;
 }
 
 .login-out {

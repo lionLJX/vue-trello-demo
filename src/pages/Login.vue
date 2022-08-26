@@ -8,13 +8,13 @@
                     <div class="login-input">
                         <input type="text" name="user-email" class="login-email" placeholder="输入电子邮件" v-model="useremail">
                         <input type="password" name="password" class="login-password" placeholder="输入密码" v-model="userpassword">
-                        <input type="submit" class="login-submit" value="登录" v-on:click="submit">
+                        <input type="submit" class="login-submit" value="登录" @click="submit">
                     </div>
                     <hr class="hr">
                     <ul class="login-link">
                         <li>
-                            <a href="https://trello.com/forgot" class="forgot-link">无法登录</a>
-                            <a href="https://trello.com/signup" class="create-link create-circle">注册新账号</a>
+                            <a href="javascript:;" class="forgot-link">无法登录</a>
+                            <a href="javascript:;" class="create-link create-circle">注册新账号</a>
                         </li>
                     </ul>
                 </form>
@@ -23,8 +23,8 @@
         </div>
         <ul class="login-link login-ul">
                     <li>
-                        <a href="https://trello.com/privacy" target="_blank">隐私策略</a>
-                        <a href="https://trello.com/legal" target="_blank" class="create-circle">服务条款</a>
+                        <a href="javascript:;" target="_blank">隐私策略</a>
+                        <a href="javascript:;" target="_blank" class="create-circle">服务条款</a>
                     </li>
             </ul>
         <div class="footer">
@@ -34,31 +34,31 @@
             </div>
             <ul class="footer-ul">
                 <li class="footer-li">
-                    <a href="https://trello.com/templates" class="footer-a">模板</a>
+                    <a href="javascript:;" class="footer-a">模板</a>
                 </li>
                 <li class="footer-li">
-                    <a href="https://trello.com/pricing" class="footer-a">价格</a>
+                    <a href="javascript:;" class="footer-a">价格</a>
                 </li>
                 <li class="footer-li">
-                    <a href="https://trello.com/platforms" class="footer-a">应用</a>
+                    <a href="javascript:;" class="footer-a">应用</a>
                 </li>
                 <li class="footer-li">
-                    <a href="https://www.atlassian.com/company/careers/trello" class="footer-a">工作机会</a>
+                    <a href="javascript:;" class="footer-a">工作机会</a>
                 </li>
                 <li class="footer-li">
-                    <a href="https://blog.trello.com/" class="footer-a">博客</a>
+                    <a href="javascript:;" class="footer-a">博客</a>
                 </li>
                 <li class="footer-li">
-                    <a href="http://developers.trello.com/" class="footer-a">开发者</a>
+                    <a href="javascript:;" class="footer-a">开发者</a>
                 </li>
                 <li class="footer-li">
-                    <a href="https://trello.com/about" class="footer-a">关于</a>
+                    <a href="javascript:;" class="footer-a">关于</a>
                 </li>
                 <li class="footer-li">
-                    <a href="http://help.trello.com/" class="footer-a">帮助</a>
+                    <a href="javascript:;" class="footer-a">帮助</a>
                 </li>
                 <li class="footer-li">
-                    <a href="https://trello.com/login#" class="footer-a">Cookie设置</a>
+                    <a href="javascript:;" class="footer-a">Cookie设置</a>
                 </li>
             </ul>
         </div>
@@ -68,7 +68,7 @@
 
 
 <script >
-window.sessionStorage.setItem('status', 0);
+// window.sessionStorage.setItem('status', 0);
 
 export default {
     name : 'login',

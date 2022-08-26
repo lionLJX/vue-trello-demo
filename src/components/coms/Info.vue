@@ -1,40 +1,53 @@
 <template>
-    <div class="Info">
-        <div class="info-contain">
-            <div class="add">
-                <div class="add-symbol" >+</div>
-                <div class="add-btn" >添加卡片</div>
+    <div class="main-info">
+        <div class="info">
+            <div class="info-title">
+                {{title}}
+                <div class="sym-omit">...</div>
             </div>
-            <div class="info-logo"></div>
+            <!-- <main-item v-for="item in todoData"></main-item> -->
+            <div v-for="item in 1" :key="item">
+                <main-item></main-item>
+            </div>
+            <div class="info-add" v-if="!adding">
+                <div class="con-add" @click="addBtn">
+                    <div class="sym-add">+</div>
+                    添加卡片
+                </div> 
+                <div class="sym-dir">🗇</div>
+            </div>
+            <div class="info-adding" v-else-if="adding">
+                <textarea cols="25" rows="3" class="adding-text" checked v-model="textVal"></textarea>
+                <div class="add-bottom">
+                    <button class="add-btn">添加卡片</button>
+                    <div class="sym-cha" @click="addBtn">🗙</div>
+                    <div class="sym-omit-ing">...</div>
+                </div>
+            </div>
         </div>
-        <div class='input-add-block'>
-            <input type="text" class="input-item" checked v-model="content" @keyup.enter="addItem">
-        </div>
-        <main-item v-for="(item, index) in todoData" :key="index" :todo="item"></main-item>
     </div>
 </template>
 
 <script>
-import Item from './Item.vue'
+import MainItem from './Item.vue'
 
 export default {
-    name : 'Info',
+    name : 'MainInfo',
     data() {
         return {
-            todoData : [],
-            content : ''
+            content : '',
+            adding : false,
+            textVal : ''
         }
     },
     components : {
-        MainItem : Item
+        MainItem
     },
-    // methods : {
-    //     childClick :function() {
-    //         console.log(inputdisplay);
-    //         inputdisplay = true;
-    //     }
-    // }
     methods : {
+        addBtn() {
+            this.adding = !this.adding
+            if(this.adding === false)this.textVal = '';
+        },
         addItem() {
             if(this.content == '')return ;
 
@@ -43,67 +56,103 @@ export default {
             })
             this.content = ''
         }
-    }
+    },
+    props : ['title','todoList']
 }
 </script>
 
 
-<style>
-.input-add-none {
-    display: none;
-}
-
-.input-add-block {
-    display: block;
-}
-
-.input-item {
-    height: 36px;
+<style scoped>
+.info {
+    /* display: flex; */
+    position: relative;
     width: 250px;
     border-radius: 5px;
+    background-color: #dee1e6;
+    margin: 0 50px;
+    color: #909090;
+}
+
+.info-title{
+    padding-left: 20px;
     font-size: 16px;
+    line-height: 38px;
+    color: #0d5c8b;
+    font-weight: 700;
 }
 
-.info-contain {
-   font-weight: 400;
-   color: rgb(147, 152, 164);
-}
 
-.info-contain {
-    height: 40px;
-        border-bottom: 1px solid black;
-}
-
-.add .add-symbol,
-.add .add-btn {
+.sym-omit{
     display: inline-block;
-    line-height: 35px;
+    position: absolute;
+    right: 10px;
+    top: -2px;
+    cursor: pointer;
 }
 
-.add-symbol {
+.info-add {
+    display: flex;
+    padding: 0 10px;
+    justify-content: space-between;
+    line-height: 30px;
+}
+
+.sym-add {
+    padding-right: 5px;
+}
+
+.con-add {
+    display: flex;
+    cursor: pointer;
+}
+
+.adding-text {
+    margin: 2px 10px;
+    background-color: rgb(242, 243, 245);
+    resize: none;
+    outline: none;
+    font-size: 16px;
+    border-radius: 4px;
+    padding: 4px 7px;
+}
+
+.add-bottom {
+    display: flex;
     position: relative;
-    top: 0px;
-    left: -74px;
-    font-size: 30px;
+    padding: 0 10px;
+    line-height: 40px;
+    /* height: 114px; */
 }
 
 .add-btn {
-    position: relative;
-    left: -70px;
-    top: -5px;
-}
-
-.add {
-    width: 250px;
-    height: 34px;
+    background-color: #0277bf;
+    padding: auto 0;
+    font-size: 16px;
+    color: #f2f2f2;
+    font-weight: 500;
     cursor: pointer;
-    border-radius: 5px;
-    padding: 3px 0 3px 0;
+    box-shadow: #909090 2px;
+    border-radius: 4px;
 }
 
-.add:hover {
-    background-color: rgb(217, 217, 225);
-    transition: .4s;
+.sym-cha {
+    margin-left: 10px;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 30px;
+    cursor: pointer;
 }
 
+.info-adding {
+    height: 109px;
+    transition: .2s;
+}
+
+.sym-omit-ing {
+    position: absolute;
+    font-weight: 700;
+    right: 23px;
+    top: -6px;
+    cursor: pointer;
+}
 </style>

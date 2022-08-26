@@ -1,79 +1,42 @@
 <template>
-    <div class="Item" v-if="isshow">{{todo.content}}
-    <div class="choose" @click="chooseShow">...
-        <div class="cha" v-on:click="chaShow" v-show="whethershow">×</div>
-        <div class="move" v-show="moveshow">移动</div>
-    </div>
+    <div class="item">
+        <div class="list-item">
+            test
+            <div class="sym-pan">🖊️</div>
+        </div>
     </div>
 </template>
 
 <script>
 export default {
-    name : 'Item',
-    props : {
-        todo : Object
-    },
-    data() {
-        return {
-            isshow : true,
-            whethershow : false,
-            moveshow : false
-        }
-    },
-    methods : {
-        chaShow (){
-            this.isshow = !this.isshow;
-        },
-        chooseShow () {
-            this.whethershow = !this.whethershow;
-            this.moveshow = !this.moveshow;
-        }
-    }
+    name : 'ListItem',
 }
 </script>
 
-<style>
-.Item {
+<style scoped>
+.item {
+    height: 35px;
+}
+
+.list-item {
     position: relative;
-    color: #000;
-    display: block;
-}
-
-.cha {
-    position: absolute;
-    left: 20px;
-    top: 42px;
-    cursor: pointer;
-    width: 60px;
-}
-
-.choose {
-    display: inline-block;
-    position: absolute;
-    top: 0;
-    left: 290px;
+    margin: 2px 5px;
+    padding: 2px 10px;
+    font-size: 14px;
+    line-height: 31px;
     cursor: pointer;
 }
 
-.cha,
-.move {
-    color: white;
-    background-color: rgb(1, 19, 31);
-    opacity: .7;
+.list-item:hover {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+        top: -3px;
+        transition: .4s;
 }
 
-.move {
+.sym-pan {
     position: absolute;
-    top: 0;
-    left: 20px;
-    font-size: 16px;
-    font-weight: 400;
-    width: 60px;
+    right: 5px;
+    top: 2px;
 }
 
-.cha:hover,
-.move:hover {
-    left: 30px;
-    transition: .7s ease-in-out;
-}
 </style>
