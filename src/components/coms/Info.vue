@@ -7,10 +7,10 @@
             </div>
             <!-- <main-item v-for="item in todoData"></main-item> -->
             <div v-for="(addL,index) in addList" :key="'addL'+index">
-                <main-item :text="addL" :todoWhich="todoWhich" :index="index"></main-item>
+                <main-item :text="addL" :todoWhich="todoWhich" :index="index" :hour="hour" :min="min"></main-item>
             </div>
             <div v-for="(todo,index) in todoTitle" :key="'todo'+index">
-                <main-item :text="todo" :todoWhich="todoWhich" :index="addNumItem+index"></main-item>
+                <main-item :text="todo" :todoWhich="todoWhich" :index="addNumItem+index" :hour="0" :min="0"></main-item>
             </div>
             <div class="info-add" v-if="!adding">
                 <div class="con-add" @click="addBtn">
@@ -24,7 +24,12 @@
                 <div class="add-bottom">
                     <button class="add-btn" @click="addItem">保存卡片</button>
                     <div class="sym-cha" @click="addBtn">🗙</div>
-                    <div class="sym-omit-ing">...</div>
+                    <div class="sym-omit-ing" title="设置时长" @click="setTime">...</div>
+                </div>
+                <div class="date-input" v-if="dateShow">
+                    <input type="text" class="hour-input" v-model.number="hour"> 
+                    :
+                    <input type="text" class="min-input" v-model.number="min">
                 </div>
             </div>
         </div>
@@ -41,7 +46,10 @@ export default {
             adding : false,
             textVal : '',
             addList : [],
-            oldlist : []
+            oldlist : [],
+            dateShow : false,
+            hour : 0,
+            min : 0
         }
     },
     computed : {
@@ -59,6 +67,8 @@ export default {
     methods : {
         addBtn() {
             if(this.adding === false)this.textVal = '';
+            this.adding = !this.adding
+            this.dateShow = false
         },
         addItem() {
             if(this.textVal == '') {
@@ -83,6 +93,9 @@ export default {
             if(todoWhich == 'todoWait')return JSON.parse(window.localStorage.getItem('todoWait'))
             if(todoWhich == 'todoDoing')return JSON.parse(window.localStorage.getItem('todoDoing'))
             if(todoWhich == 'todoFinish')return JSON.parse(window.localStorage.getItem('todoFinish'))
+        },
+        setTime() {
+            this.dateShow = true
         }
     },
     props : ['title','todoList','todoWhich'],
@@ -217,4 +230,24 @@ export default {
     top: -6px;
     cursor: pointer;
 }
+
+.date-input {
+    /* height: 50px; */
+    background-color: #dee1e6;
+    font-size: 14px;
+}
+
+.hour-input,
+.min-input{
+    display: inline-block;
+    margin: 10px 13px;
+    padding: 5px;
+    padding-left: 37px;
+    background-color: #fff;
+    border-radius: 3px;
+    width: 51px;
+    height: 30px;
+    font-size: 16px;
+}
+
 </style>

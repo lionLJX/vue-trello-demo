@@ -2,6 +2,7 @@
     <div class="item" :style="zStyle">
         <div class="list-item" @click="choiceBtn">
             {{text}}
+            <div class="date" v-if="!(todoWhich == 'todoFinish')" v-show="whetherS">{{hour}}小时{{min}}分钟</div>
             <div class="sym-pan">🖊️</div>
         </div>
         <div class="box-list" v-show="showList">
@@ -24,7 +25,7 @@
 <script>
 export default {
     name : 'ListItem',
-    props : ['text','todoWhich','index'],
+    props : ['text','todoWhich','index','hour','min'],
     methods : {
         choiceBtn() {
             if(this.zStyle == '')this.zStyle = 'z-index : 100'
@@ -61,6 +62,13 @@ export default {
             showList : false,
             zStyle : '',
             moveShow : false
+        }
+    },
+    computed : {
+        whetherS() {
+            if(this.min == undefined)return false
+            if(this.min == 0 && this.hour == 0) return undefined
+            return true
         }
     }
 }
@@ -157,4 +165,10 @@ export default {
     animation: appear .5s;
 }
 
+.date {
+    position: absolute;
+    right: 32px;
+    top: 3px;
+    font-size: 12px;
+}
 </style>
