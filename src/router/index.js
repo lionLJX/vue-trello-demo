@@ -46,7 +46,7 @@ router.beforeEach((to, from, next) => {
 
   //直接靠url跳转到其他页面，如果没有登录，将自动跳转
   //到登录页面
-  const status = window.sessionStorage.getItem('useremail');
+  const status = window.localStorage.getItem('useremail');
   if (status == 'vip@163.com' && to.path == '/login')
     next('/home');
   else if (to.path == '/home' && status == null){
