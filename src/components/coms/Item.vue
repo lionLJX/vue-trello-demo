@@ -1,7 +1,7 @@
 <template>
     <div class="item">
         <div class="list-item">
-            test
+            {{text}}
             <div class="sym-pan">🖊️</div>
         </div>
     </div>
@@ -10,6 +10,7 @@
 <script>
 export default {
     name : 'ListItem',
+    props : ['text']
 }
 </script>
 

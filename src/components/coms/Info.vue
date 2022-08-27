@@ -6,8 +6,11 @@
                 <div class="sym-omit">...</div>
             </div>
             <!-- <main-item v-for="item in todoData"></main-item> -->
-            <div v-for="item in 1" :key="item">
-                <main-item></main-item>
+            <div v-for="(addL,index) in addList" :key="'addL'+index">
+                <main-item :text="addL"></main-item>
+            </div>
+            <div v-for="(todo,index) in todoTitle" :key="'todo'+index">
+                <main-item :text="todo"></main-item>
             </div>
             <div class="info-add" v-if="!adding">
                 <div class="con-add" @click="addBtn">
@@ -19,7 +22,7 @@
             <div class="info-adding" v-else-if="adding">
                 <textarea cols="25" rows="3" class="adding-text" checked v-model="textVal"></textarea>
                 <div class="add-bottom">
-                    <button class="add-btn">添加卡片</button>
+                    <button class="add-btn" @click="addItem">添加卡片</button>
                     <div class="sym-cha" @click="addBtn">🗙</div>
                     <div class="sym-omit-ing">...</div>
                 </div>
@@ -35,9 +38,14 @@ export default {
     name : 'MainInfo',
     data() {
         return {
-            content : '',
             adding : false,
-            textVal : ''
+            textVal : '',
+            addList : []
+        }
+    },
+    computed : {
+        todoTitle() {
+            return this.todoList
         }
     },
     components : {
@@ -49,15 +57,27 @@ export default {
             if(this.adding === false)this.textVal = '';
         },
         addItem() {
-            if(this.content == '')return ;
-
-            this.todoData.unshift({
-                content : this.content
-            })
-            this.content = ''
+            if(this.textVal == '') {
+                this.addBtn()
+                return
+            }
+            this.addList.unshift(this.textVal)
+            this.addStorage(this.textVal)
+            this.textVal = ''
+            this.addBtn()
+        },
+        addStorage(newTitle) {
+            // 用于添加储存新建item
+            var arrSto = []
+            if(window.sessionStorage.getItem(this.todoWhich) != '') {
+                arrSto = JSON.parse(window.sessionStorage.getItem(this.todoWhich))
+            }
+            arrSto.unshift(newTitle)
+            window.sessionStorage.setItem(this.todoWhich, JSON.stringify(arrSto))
+            console.log('dd')
         }
     },
-    props : ['title','todoList']
+    props : ['title','todoList','todoWhich']
 }
 </script>
 

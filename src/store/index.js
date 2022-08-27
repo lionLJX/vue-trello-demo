@@ -17,17 +17,33 @@ const mutations = {
     UpdateVal(state) {
         var i = 0
         var sto = window.sessionStorage
-        if(sto.getItem('todoWait') == null)sto.setItem('todoWait', [])
+        var todoD = []
+        var todoF = []
+        var todoW = []
+        // wait
+        if(sto.getItem('todoWait') == null) sto.setItem('todoWait', [])
+        if(sto.getItem('todoWait') != '') 
+        todoW = JSON.parse(sto.getItem('todoWait'))
+
+        //doing
         if(sto.getItem('todoDoing') == null)sto.setItem('todoDoing', [])
+        if(sto.getItem('todoDoing') != '')
+        todoD = JSON.parse(sto.getItem('todoDoing'))
+
+        //finish
         if(sto.getItem('todoFinish') == null)sto.setItem('todoFinish', [])
+        if(sto.getItem('todoFinish') != '')
+        todoF = JSON.parse(sto.getItem('todoFinish'))
+
         while(true) {
-            if(sto.getItem('todoWait')[i] === undefined && sto.getItem('todoDoing')[i] === undefined && sto.getItem('todoFinish')[i] === undefined)return
+            if(todoW[i] === undefined && todoD[i] === undefined && todoF[i] === undefined)break
             else {
-                if(sto.getItem('todoWait')[i] != undefined)state.todoWait[i] = sto.getItem('todoWait')[i]
-                if(sto.getItem('todoDoing')[i] != undefined)state.todoDoing[i] = sto.getItem('todoDoing')[i]
-                if(sto.getItem('todoFinish')[i] != undefined)state.todoFinish[i] = sto.getItem('todoFinish')[i]
+                if(todoW[i] != undefined)state.todoWait[i] = todoW[i]
+                if(todoD[i] != undefined)state.todoDoing[i] = todoD[i]
+                if(todoF[i] != undefined)state.todoFinish[i] = todoF[i]
 
             }
+            i++;
         }
     }
 }
