@@ -8,6 +8,8 @@
                     <div class="login-input">
                         <input type="text" name="user-email" class="login-email" placeholder="输入电子邮件" v-model="useremail">
                         <input type="password" name="password" class="login-password" placeholder="输入密码" v-model="userpassword">
+                        <input type="checkbox" v-model="loginlong" value="true" id="long">
+                        <label for="long">保持登录状态</label>
                         <input type="submit" class="login-submit" value="登录" @click="submit">
                     </div>
                     <hr class="hr">
@@ -75,7 +77,8 @@ export default {
     data(){
         return {
         useremail : '',
-        userpassword : ''
+        userpassword : '',
+        loginlong : false
         }
     },
     methods: {
@@ -83,8 +86,10 @@ export default {
         // 单用户登录功能，只有输入无误才可登录
             if (this.useremail == 'vip@163.com' && this.userpassword == 'vip') {
                 console.log('用户信息无误');
-                window.sessionStorage.setItem('useremail', 'vip@163.com');
-                window.sessionStorage.setItem('userpassword', 'vip');
+                if(this.loginlong == true) {
+                    window.localStorage.setItem('useremail', 'vip@163.com');
+                    window.localStorage.setItem('userpassword', 'vip');
+                }
                 this.$router.push('/home');
             }
             else {
@@ -97,11 +102,15 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+html,
+body {
+    height: 100%;
+}
 
 body {
     background-image: url('../../static/login-bgi.jpg');
-    background-size: 100%;
+    background-size: cover;
     background-repeat: no-repeat;
 }
 
@@ -148,6 +157,7 @@ body {
 .login-submit {
     text-align: center;
     background: #5AAC44;
+    margin-top: 10px;
     width: 100%;
     height: 35px;
     line-height: 16px;

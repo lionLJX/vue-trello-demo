@@ -6,17 +6,23 @@ Vue.use(Vuex)
 const state = {
     todoWait : [],
     todoDoing : [],
-    todoFinish : []
+    todoFinish : [],
+    // moveTitle : ''
 }
 const actions = {
+    // 更新本地存储中的数据
     updateVal(context) {
         context.commit('UpdateVal')
-    }
+    },
+    // 添加数据并实现移动卡片到其他分组
+    // moveTo(context, title) {
+    //     context.commit('MoveTo', todoWhich)
+    // }
 }
 const mutations = {
     UpdateVal(state) {
         var i = 0
-        var sto = window.sessionStorage
+        var sto = window.localStorage
         var todoD = []
         var todoF = []
         var todoW = []
@@ -45,7 +51,10 @@ const mutations = {
             }
             i++;
         }
-    }
+    },
+    // MoveTo(state, title) {
+    //     state.moveTitle = title
+    // }
 }
 
 

@@ -7,10 +7,10 @@
             </div>
             <!-- <main-item v-for="item in todoData"></main-item> -->
             <div v-for="(addL,index) in addList" :key="'addL'+index">
-                <main-item :text="addL"></main-item>
+                <main-item :text="addL" :todoWhich="todoWhich" :index="index"></main-item>
             </div>
             <div v-for="(todo,index) in todoTitle" :key="'todo'+index">
-                <main-item :text="todo"></main-item>
+                <main-item :text="todo" :todoWhich="todoWhich" :index="addNumItem+index"></main-item>
             </div>
             <div class="info-add" v-if="!adding">
                 <div class="con-add" @click="addBtn">
@@ -22,7 +22,7 @@
             <div class="info-adding" v-else-if="adding">
                 <textarea cols="25" rows="3" class="adding-text" checked v-model="textVal"></textarea>
                 <div class="add-bottom">
-                    <button class="add-btn" @click="addItem">添加卡片</button>
+                    <button class="add-btn" @click="addItem">保存卡片</button>
                     <div class="sym-cha" @click="addBtn">🗙</div>
                     <div class="sym-omit-ing">...</div>
                 </div>
@@ -40,12 +40,17 @@ export default {
         return {
             adding : false,
             textVal : '',
-            addList : []
+            addList : [],
+            oldlist : []
         }
     },
     computed : {
         todoTitle() {
-            return this.todoList
+            if(this.oldlist == '') this.oldlist = this.todoList
+            return this.oldlist
+        },
+        addNumItem() {
+            return this.addList.length || 0
         }
     },
     components : {
@@ -53,7 +58,6 @@ export default {
     },
     methods : {
         addBtn() {
-            this.adding = !this.adding
             if(this.adding === false)this.textVal = '';
         },
         addItem() {
@@ -64,20 +68,58 @@ export default {
             this.addList.unshift(this.textVal)
             this.addStorage(this.textVal)
             this.textVal = ''
-            this.addBtn()
+            this.adding = false
         },
         addStorage(newTitle) {
             // 用于添加储存新建item
             var arrSto = []
-            if(window.sessionStorage.getItem(this.todoWhich) != '') {
-                arrSto = JSON.parse(window.sessionStorage.getItem(this.todoWhich))
+            if(window.localStorage.getItem(this.todoWhich) != '') {
+                arrSto = JSON.parse(window.localStorage.getItem(this.todoWhich))
             }
             arrSto.unshift(newTitle)
-            window.sessionStorage.setItem(this.todoWhich, JSON.stringify(arrSto))
-            console.log('dd')
+            window.localStorage.setItem(this.todoWhich, JSON.stringify(arrSto))
+        },
+        getList(todoWhich) {
+            if(todoWhich == 'todoWait')return JSON.parse(window.localStorage.getItem('todoWait'))
+            if(todoWhich == 'todoDoing')return JSON.parse(window.localStorage.getItem('todoDoing'))
+            if(todoWhich == 'todoFinish')return JSON.parse(window.localStorage.getItem('todoFinish'))
         }
     },
-    props : ['title','todoList','todoWhich']
+    props : ['title','todoList','todoWhich'],
+    mounted() {
+        // 用全局事件总线创建卡片移动事件
+        if(this.todoWhich == 'todoWait') {
+            this.$bus.$on('moveToWait', (title,index) => {
+                this.textVal = title
+                console.log(this.textVal)
+                this.addItem()
+            })
+            this.$bus.$on('deleteWait', (index) => {
+                var arr =JSON.parse(window.localStorage.getItem('todoWait'))
+                arr.splice(index,1)
+                window.localStorage.setItem('todoWait', JSON.stringify(arr))
+                this.oldlist = this.getList(this.todoWhich)
+            })
+        }
+        if(this.todoWhich == 'todoDoing') {
+            this.$bus.$on('moveToDoing', (title,index) => {
+                this.textVal = title
+                this.addItem()
+            })
+            this.$bus.$on('deleteDoing', (index) => {
+                var arr =JSON.parse(window.localStorage.getItem('todoDoing'))
+                arr.splice(index,1)
+                window.localStorage.setItem('todoDoing', JSON.stringify(arr))
+                this.oldlist = this.getList(this.todoWhich)
+            })
+        }
+        if(this.todoWhich == 'todoFinish') {
+            this.$bus.$on('moveToFinish', (title,index) => {
+                this.textVal = title
+                this.addItem()
+            })
+        }
+    }
 }
 </script>
 

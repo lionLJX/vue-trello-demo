@@ -14,8 +14,8 @@ export default {
     name : 'Header',
     methods : {
         loginOut() {
-            window.sessionStorage.removeItem('useremail');
-            window.sessionStorage.removeItem('userpassword');
+            window.localStorage.removeItem('useremail');
+            window.localStorage.removeItem('userpassword');
             this.$router.push('/login');
         }
     }
