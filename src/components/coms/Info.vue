@@ -16,7 +16,7 @@
             </div>
             <!-- 回收站 -->
             <div v-if="(todoWhich == 'todoRecovery')">
-                <div v-for="(recovery,index) in relist" :key="index">
+                <div v-for="(recovery,index) in todoRecovery" :key="index">
                     <main-item :text="recovery" :todoWhich="todoWhich" :index="index" :hour="0" :min="0"></main-item>
                 </div>
             </div>
@@ -99,7 +99,7 @@ export default {
             this.adding = false
             if(m == undefined && this.todoWhich == 'todoDoing') {
                 if(this.hour != 0 || this.min != 0) {
-                    var timer = setInterval(() => {
+                    let timer = setInterval(() => {
                         if(this.min != 0)this.min--
                         else if(this.min == 0) {
                             if(this.hour != 0){
@@ -116,7 +116,7 @@ export default {
             else  if(m != undefined) {
                 this.hour = h
                 this.min = m
-                var timer = setInterval(() => {
+                let timer = setInterval(() => {
                     if(this.min != 0)this.min--
                     else if(this.min == 0) {
                         if(this.hour != 0){
@@ -133,7 +133,7 @@ export default {
         },
         addStorage(newTitle) {
             // 用于添加储存新建item
-            var arrSto = []
+            let arrSto = []
             if(window.localStorage.getItem(this.todoWhich) != '') {
                 arrSto = JSON.parse(window.localStorage.getItem(this.todoWhich))
             }
@@ -152,7 +152,7 @@ export default {
     },
     props : ['title','todoList','todoWhich'],
     mounted() {
-        this.todoRecovery
+        // this.todoRecovery
         // 用全局事件总线创建卡片移动事件
         if(this.todoWhich == 'todoWait') {
             this.$bus.$on('moveToWait', (title,index) => {
@@ -160,7 +160,7 @@ export default {
                 this.addItem()
             })
             this.$bus.$on('deleteWait', (index) => {
-                var arr = JSON.parse(window.localStorage.getItem('todoWait'))
+                let arr = JSON.parse(window.localStorage.getItem('todoWait'))
                 arr.splice(index,1)
                 window.localStorage.setItem('todoWait', JSON.stringify(arr))
                 // console.log(arr)
@@ -176,11 +176,11 @@ export default {
                 this.addItem(hour,min)
             })
             this.$bus.$on('deleteDoing', (index) => {
-                var arr =JSON.parse(window.localStorage.getItem('todoDoing'))
+                let arr =JSON.parse(window.localStorage.getItem('todoDoing'))
                 arr.splice(index,1)
                 window.localStorage.setItem('todoDoing', JSON.stringify(arr))
                 this.$bus.$emit('updateTodoList', 'todoDoing')
-                this.oldlist = this.getList(this.todoWhich)
+                this.oldlist = this.getList('todoDoing')
                 this.addList = []
                 
             })
@@ -192,11 +192,23 @@ export default {
             })
             // 从完成卡片组中删除（移动到回收站）
             this.$bus.$on('todoFinish', (index) => {
-                var arr =JSON.parse(window.localStorage.getItem('todoFinish'))
+                let arr =JSON.parse(window.localStorage.getItem('todoFinish'))
                 arr.splice(index,1)
                 window.localStorage.setItem('todoFinish', JSON.stringify(arr))
                 this.$bus.$emit('updateTodoList', 'todoFinish')
-                this.relist = this.getList(this.todoFinish)
+                this.relist = this.getList('todoFinish')
+            })
+        }
+        // 彻底删除
+        if(this.todoWhich == 'todoRecovery') {
+            this.$bus.$on('deepDel', (index)=> {
+                let arr = JSON.parse(window.localStorage.getItem('todoRecovery'))
+                arr.splice(index,1)
+                window.localStorage.setItem('todoRecovery', JSON.stringify(arr))
+                this.$bus.$emit('updateRecovery')
+                this.relist = JSON.parse(window.localStorage.getItem('todoRecovery'))
+                this.todoRecovery
+                this.dateShow = false
             })
         }
 
