@@ -27,9 +27,9 @@
                     <div class="sym-omit-ing" title="设置时长" @click="setTime">...</div>
                 </div>
                 <div class="date-input" v-if="dateShow">
-                    <input type="text" class="hour-input" v-model.number="hour"> 
+                    <input type="text" class="hour-input" v-model="hour"> 
                     :
-                    <input type="text" class="min-input" v-model.number="min">
+                    <input type="text" class="min-input" v-model="min">
                 </div>
             </div>
         </div>
@@ -70,15 +70,47 @@ export default {
             this.adding = !this.adding
             this.dateShow = false
         },
-        addItem() {
+        addItem(h, m) {
             if(this.textVal == '') {
                 this.addBtn()
                 return
             }
             this.addList.unshift(this.textVal)
             this.addStorage(this.textVal)
-            this.textVal = ''
             this.adding = false
+            if(m == undefined && this.todoWhich == 'todoDoing') {
+                if(this.hour != 0 || this.min != 0) {
+                    var timer = setInterval(() => {
+                        if(this.min != 0)this.min--
+                        else if(this.min == 0) {
+                            if(this.hour != 0){
+                                this.hour--
+                                this.min = 59
+                            }else {
+                                alert('任务已超时')
+                                clearInterval(timer)
+                            }
+                        }
+                    }, 1000*60);
+                }
+            }
+            else  if(m != undefined) {
+                this.hour = h
+                this.min = m
+                var timer = setInterval(() => {
+                    if(this.min != 0)this.min--
+                    else if(this.min == 0) {
+                        if(this.hour != 0){
+                            this.hour--
+                            this.min = 59
+                        }else {
+                            alert('任务已超时')
+                            clearInterval(timer)
+                        }
+                    }
+                }, 1000*60);
+            }
+            this.textVal = ''
         },
         addStorage(newTitle) {
             // 用于添加储存新建item
@@ -90,11 +122,12 @@ export default {
             window.localStorage.setItem(this.todoWhich, JSON.stringify(arrSto))
         },
         getList(todoWhich) {
-            if(todoWhich == 'todoWait')return JSON.parse(window.localStorage.getItem('todoWait'))
+            if(todoWhich == 'todoWait')return JSON.parse(window.localStorage.getItem('todoWait')) || ''
             if(todoWhich == 'todoDoing')return JSON.parse(window.localStorage.getItem('todoDoing'))
             if(todoWhich == 'todoFinish')return JSON.parse(window.localStorage.getItem('todoFinish'))
         },
         setTime() {
+            if(this.todoWhich != 'todoFinish')
             this.dateShow = true
         }
     },
@@ -104,26 +137,31 @@ export default {
         if(this.todoWhich == 'todoWait') {
             this.$bus.$on('moveToWait', (title,index) => {
                 this.textVal = title
-                console.log(this.textVal)
                 this.addItem()
             })
             this.$bus.$on('deleteWait', (index) => {
                 var arr =JSON.parse(window.localStorage.getItem('todoWait'))
                 arr.splice(index,1)
                 window.localStorage.setItem('todoWait', JSON.stringify(arr))
-                this.oldlist = this.getList(this.todoWhich)
+                this.$bus.$emit('updateTodoList', 'todoWait')
+                this.oldlist = this.getList('todoWait')
+                this.addList = []
+                console.log('san')
             })
         }
         if(this.todoWhich == 'todoDoing') {
-            this.$bus.$on('moveToDoing', (title,index) => {
+            this.$bus.$on('moveToDoing', (title,index,hour,min) => {
                 this.textVal = title
-                this.addItem()
+                this.addItem(hour,min)
             })
             this.$bus.$on('deleteDoing', (index) => {
                 var arr =JSON.parse(window.localStorage.getItem('todoDoing'))
                 arr.splice(index,1)
                 window.localStorage.setItem('todoDoing', JSON.stringify(arr))
+                this.$bus.$emit('updateTodoList', 'todoDoing')
                 this.oldlist = this.getList(this.todoWhich)
+                this.addList = []
+                
             })
         }
         if(this.todoWhich == 'todoFinish') {

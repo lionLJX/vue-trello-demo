@@ -39,6 +39,23 @@ export default {
         this.todoWait = this.$store.state.todoWait
         this.todoDoing = this.$store.state.todoDoing
         this.todoFinish = this.$store.state.todoFinish
+        // 设置更新传入的todolist值
+        this.$bus.$on('updateTodoList', (todoWhich) => {
+            if(this.todoWhich == 'todoWait') {
+                var arrw = JSON.parse(window.localStorage.getItem('todoWait'))
+                this.todoWait.splice(0, this.todoWait.length)
+                arrw.forEach((item,index,arr) => {
+                    this.todoWait[index] = item
+                })
+            }
+            if(this.todoWhich == 'todoDoing'){
+                var arrw = JSON.parse(window.localStorage.getItem('todoDoing'))
+                this.todoDoing.splice(0, this.todoDoing.length)
+                arrw.forEach((item,index,arr) => {
+                    this.todoDoing[index] = item
+                })
+            }
+        })
     }
 }
 </script>
