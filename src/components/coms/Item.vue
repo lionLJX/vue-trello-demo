@@ -51,6 +51,7 @@ export default {
             }
             else this.$bus.$emit('moveToDoing', this.text, this.index)
             this.$bus.$emit('deleteWait', this.index)
+            console.log(this.index)
             this.choiceBtn()
         },
         moveToFinish() {

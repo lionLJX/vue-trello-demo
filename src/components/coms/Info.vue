@@ -12,7 +12,7 @@
             <div v-for="(todo,index) in todoTitle" :key="'todo'+index">
                 <main-item :text="todo" :todoWhich="todoWhich" :index="addNumItem+index" :hour="0" :min="0"></main-item>
             </div>
-            <div class="info-add" v-if="!adding">
+            <div class="info-add" v-if="!adding" v-show="!(todoWhich == 'todoRecovery')">
                 <div class="con-add" @click="addBtn">
                     <div class="sym-add">+</div>
                     添加卡片
@@ -20,7 +20,7 @@
                 <div class="sym-dir">🗇</div>
             </div>
             <div class="info-adding" v-else-if="adding">
-                <textarea cols="25" rows="3" class="adding-text" checked v-model="textVal"></textarea>
+                <textarea cols="25" rows="3" class="adding-text"  v-model="textVal" ref="f"></textarea>
                 <div class="add-bottom">
                     <button class="add-btn" @click="addItem">保存卡片</button>
                     <div class="sym-cha" @click="addBtn">🗙</div>
@@ -69,6 +69,12 @@ export default {
             if(this.adding === false)this.textVal = '';
             this.adding = !this.adding
             this.dateShow = false
+            if(this.adding === true) {
+                this.$nextTick(function(){
+                // console.log(this.$refs)
+                this.$refs.f.focus()
+            })
+            }
         },
         addItem(h, m) {
             if(this.textVal == '') {
@@ -140,9 +146,10 @@ export default {
                 this.addItem()
             })
             this.$bus.$on('deleteWait', (index) => {
-                var arr =JSON.parse(window.localStorage.getItem('todoWait'))
+                var arr = JSON.parse(window.localStorage.getItem('todoWait'))
                 arr.splice(index,1)
                 window.localStorage.setItem('todoWait', JSON.stringify(arr))
+                console.log(arr)
                 this.$bus.$emit('updateTodoList', 'todoWait')
                 this.oldlist = this.getList('todoWait')
                 this.addList = []

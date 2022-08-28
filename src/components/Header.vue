@@ -5,6 +5,10 @@
         </div>
         <div class="contain-out"><div class="login-out" @click="loginOut">退出登录</div>
         </div>
+        <div class="contain-recovery">
+            <div class="to-recovery" @click="routerLink">{{title}}</div>
+        </div>
+        
 
     </div>
 </template>
@@ -17,8 +21,13 @@ export default {
             window.localStorage.removeItem('useremail');
             window.localStorage.removeItem('userpassword');
             this.$router.push('/login');
+        },
+        routerLink() {
+            if(this.title === '回收站')this.$router.push('/recovery')
+            else this.$router.push('/home')
         }
-    }
+    },
+    props : ['title']
 }
 </script>
 
@@ -39,11 +48,11 @@ export default {
 }
 
 /* .search, */
-.contain-out {
-    float: right;
-}
 
-.contain-out {
+
+.contain-out,
+.contain-recovery {
+        float: right;
     width: 100px;
     text-align: center;
     height: 100%;
@@ -51,7 +60,8 @@ export default {
     cursor: pointer;
 }
 
-.login-out {
+.login-out,
+.to-recovery {
     line-height: 30px;
     margin: 10px 15px;
     border-radius: 5px;
@@ -59,6 +69,9 @@ export default {
     color: white;;
 }
 
+.contain-recovery {
+    margin-right: 20px;
+}
 /* .search {
     height: 100%;
     width: 100px;
