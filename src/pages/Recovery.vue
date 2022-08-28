@@ -11,13 +11,27 @@ import MainInfo from '../components/coms/Info.vue'
 
 export default {
     name : 'Recovery',
-        components : {
+    components : {
         HomeHeader,
         MainInfo
     },
+    data() {
+        return {
+            recoveryList : []
+        }
+    },
+    mounted() {
+        this.$store.dispatch('getRecovery')
+        this.recoveryList = this.$store.state.todoRecovery
+    }
 }
 </script>
 
 <style>
-
+body {
+    background-image: url('#');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: #0078c0;
+}
 </style>

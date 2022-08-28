@@ -7,6 +7,7 @@ const state = {
     todoWait : [],
     todoDoing : [],
     todoFinish : [],
+    todoRecovery : []
     // moveTitle : ''
 }
 const actions = {
@@ -14,6 +15,9 @@ const actions = {
     updateVal(context) {
         context.commit('UpdateVal')
     },
+    getRecovery(context) {
+        context.commit('GetRecovery')
+    }
     // 添加数据并实现移动卡片到其他分组
     // moveTo(context, title) {
     //     context.commit('MoveTo', todoWhich)
@@ -41,6 +45,7 @@ const mutations = {
         if(sto.getItem('todoFinish') != '')
         todoF = JSON.parse(sto.getItem('todoFinish'))
 
+
         while(true) {
             if(todoW[i] === undefined && todoD[i] === undefined && todoF[i] === undefined)break
             else {
@@ -55,6 +60,21 @@ const mutations = {
     // MoveTo(state, title) {
     //     state.moveTitle = title
     // }
+    GetRecovery(state) {
+        var i = 0
+        var sto = window.localStorage
+        var todoR = []
+        if(sto.getItem('todoRecovery') == null)sto.setItem('todoRecovery', [])
+        if(sto.getItem('todoRecovery') != '')
+        todoR = JSON.parse(sto.getItem('todoRecovery'))
+        while(true) {
+            if(todoR[i] === undefined)break
+            else {
+                if(todoR[i] != undefined)state.todoRecovery[i] = todoR[i]
+            }
+            i++;
+        }
+    }
 }
 
 
