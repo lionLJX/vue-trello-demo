@@ -2,7 +2,7 @@
     <div class="item" :style="zStyle">
         <div class="list-item" @click="choiceBtn">
             {{text}}
-            <div class="date" v-if="!(todoWhich == 'todoFinish')" v-show="whetherS">{{hour}}小时{{min}}分钟</div>
+            <div class="date" v-if="!(todoWhich == 'todoFinish')" v-show="whetherShow">{{hour}}小时{{min}}分钟</div>
             <div class="sym-pan">🖊️</div>
         </div>
         <div class="box-list" v-show="showList">
@@ -46,7 +46,10 @@ export default {
             this.choiceBtn()
         },
         moveToDoing() {
-            this.$bus.$emit('moveToDoing', this.text, this.index)
+            if(this.hour != 0 || this.min != 0) {
+                this.$bus.$emit('moveToDoing', this.text, this.index, this.hour,this.min)
+            }
+            else this.$bus.$emit('moveToDoing', this.text, this.index)
             this.$bus.$emit('deleteWait', this.index)
             this.choiceBtn()
         },
@@ -56,21 +59,28 @@ export default {
             if(this.todoWhich == 'todoDoing')this.$bus.$emit('deleteDoing', this.index)
             this.choiceBtn()
         },
+        whetherS() {
+            if(this.min == undefined)this.whetherShow =  false
+            else if(this.min == 0 && this.hour == 0) this.whetherShow =  false
+            else this.whetherShow = true
+        }
     },
     data() {
         return {
             showList : false,
             zStyle : '',
-            moveShow : false
+            moveShow : false,
+            whetherShow  : ''
         }
     },
-    computed : {
-        whetherS() {
-            if(this.min == undefined)return false
-            if(this.min == 0 && this.hour == 0) return undefined
-            return true
-        }
-    }
+    mounted() {
+        this.whetherS()       
+    },
+    // computed : {
+    //     whetherSn() {
+    //         return
+    //     }
+    // }
 }
 </script>
 
