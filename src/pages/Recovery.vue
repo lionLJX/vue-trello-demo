@@ -23,6 +23,13 @@ export default {
     mounted() {
         this.$store.dispatch('getRecovery')
         this.recoveryList = this.$store.state.todoRecovery
+        this.$bus.$on('updateRecovery', () => {
+            let arrR = JSON.parse(window.localStorage.getItem('todoRecovery'))
+            this.recoveryList.splice(0, this.recoveryList.length)
+            arrR.forEach((item, index, arr) => {
+                this.recoveryList[index] = item
+            })
+        })
     }
 }
 </script>

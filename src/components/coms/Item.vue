@@ -1,7 +1,7 @@
 <template>
     <div class="item" :style="zStyle">
-        <div class="list-item" @click="choiceBtn">
-            {{text}}
+        <div class="list-item" @click="choiceBtn" :class="delS">
+            {{sliceT}}
             <div class="date" v-if="!(todoWhich == 'todoFinish')" v-show="whetherShow">{{hour}}小时{{min}}分钟</div>
             <div class="sym-pan">🖊️</div>
         </div>
@@ -21,7 +21,7 @@
                 <div class="delete-btn" v-if="!(todoWhich == 'todoDoing')" @click="todoDel">删除</div>
             </div>
             <div v-else>
-                <div class="deepDel">彻底删除</div>
+                <div class="deepDel" @click="deepDel">彻底删除</div>
             </div>
         </div>
     </div>
@@ -71,17 +71,23 @@ export default {
         },
         todoDel() {
             // 添加到回收站
-            var sto = window.localStorage
-            var todoR = []
+            let sto = window.localStorage
+            let todoR = []
             if(sto.getItem('todoRecovery') == null)sto.setItem('todoRecovery', [])
             if(sto.getItem('todoRecovery') != '')
             todoR = JSON.parse(sto.getItem('todoRecovery'))
-            todoR.unshift(this.text)
+            if(this.todoWhich == 'todoWait')todoR.unshift(this.text+'W')
+            else todoR.unshift(this.text+'F')
             window.localStorage.setItem('todoRecovery', JSON.stringify(todoR))
             // 删除本任务
             if(this.todoWhich == 'todoWait')this.$bus.$emit('deleteWait', this.index)
             if(this.todoWhich == 'todoFinish')this.$bus.$emit('todoFinish', this.index)
             this.choiceBtn()
+        },
+        deepDel() {
+            // 彻底删除（本地删除）
+            this.$bus.$emit('deepDel', this.index)
+            this.choiceBtn
         }
     },
     data() {
@@ -89,21 +95,28 @@ export default {
             showList : false,
             zStyle : '',
             moveShow : false,
-            whetherShow  : ''
+            whetherShow  : '',
+            textslice : '',
+            delS : ''
         }
     },
     mounted() {
-        this.whetherS()       
     },
-    // computed : {
-    //     whetherSn() {
-    //         return
-    //     }
-    // }
+    computed : {
+        sliceT() {
+            if(this.text.slice(-1) == 'F')this.delS = 'del'
+            this.textslice = this.text.slice(0,-1)
+            return this.textslice
+        }
+    }
 }
 </script>
 
 <style scoped>
+.del {
+    text-decoration: line-through;
+}
+
 .item {
     position: relative;
     height: 35px;
