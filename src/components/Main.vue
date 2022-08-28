@@ -41,7 +41,7 @@ export default {
         this.todoFinish = this.$store.state.todoFinish
         // 设置更新传入的todolist值
         this.$bus.$on('updateTodoList', (todoWhich) => {
-            console.log('zhixin')
+            // console.log('zhixin')
             if(todoWhich == 'todoWait') {
                 var arrw = JSON.parse(window.localStorage.getItem('todoWait'))
                 this.todoWait.splice(0, this.todoWait.length)
@@ -54,6 +54,13 @@ export default {
                 this.todoDoing.splice(0, this.todoDoing.length)
                 arrh.forEach((item,index,arr) => {
                     this.todoDoing[index] = item
+                })
+            }
+            if(todoWhich == 'todoFinish') {
+                var arrf = JSON.parse(window.localStorage.getItem('todoFinish'))
+                this.todoFinish.splice(0, this.todoFinish.length)
+                arrf.forEach((item,index,arr) => {
+                    this.todoFinish[index] = item
                 })
             }
         })

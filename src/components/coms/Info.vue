@@ -6,11 +6,19 @@
                 <div class="sym-omit">...</div>
             </div>
             <!-- <main-item v-for="item in todoData"></main-item> -->
-            <div v-for="(addL,index) in addList" :key="'addL'+index">
-                <main-item :text="addL" :todoWhich="todoWhich" :index="index" :hour="hour" :min="min"></main-item>
+            <div v-if="!(todoWhich == 'todoRecovery')">
+                <div v-for="(addL,index) in addList" :key="'addL'+index">
+                    <main-item :text="addL" :todoWhich="todoWhich" :index="index" :hour="hour" :min="min"></main-item>
+                </div>
+                <div v-for="(todo,index) in todoTitle" :key="'todo'+index">
+                    <main-item :text="todo" :todoWhich="todoWhich" :index="addNumItem+index" :hour="0" :min="0"></main-item>
+                </div>
             </div>
-            <div v-for="(todo,index) in todoTitle" :key="'todo'+index">
-                <main-item :text="todo" :todoWhich="todoWhich" :index="addNumItem+index" :hour="0" :min="0"></main-item>
+            <!-- 回收站 -->
+            <div v-if="(todoWhich == 'todoRecovery')">
+                <div v-for="(recovery,index) in relist" :key="index">
+                    <main-item :text="recovery" :todoWhich="todoWhich" :index="index" :hour="0" :min="0"></main-item>
+                </div>
             </div>
             <div class="info-add" v-if="!adding" v-show="!(todoWhich == 'todoRecovery')">
                 <div class="con-add" @click="addBtn">
@@ -49,7 +57,8 @@ export default {
             oldlist : [],
             dateShow : false,
             hour : 0,
-            min : 0
+            min : 0,
+            relist : []
         }
     },
     computed : {
@@ -59,6 +68,10 @@ export default {
         },
         addNumItem() {
             return this.addList.length || 0
+        },
+        todoRecovery() {
+            if(this.relist == '') this.relist = this.todoList
+            return this.relist
         }
     },
     components : {
@@ -139,6 +152,7 @@ export default {
     },
     props : ['title','todoList','todoWhich'],
     mounted() {
+        this.todoRecovery
         // 用全局事件总线创建卡片移动事件
         if(this.todoWhich == 'todoWait') {
             this.$bus.$on('moveToWait', (title,index) => {
@@ -149,11 +163,11 @@ export default {
                 var arr = JSON.parse(window.localStorage.getItem('todoWait'))
                 arr.splice(index,1)
                 window.localStorage.setItem('todoWait', JSON.stringify(arr))
-                console.log(arr)
+                // console.log(arr)
                 this.$bus.$emit('updateTodoList', 'todoWait')
                 this.oldlist = this.getList('todoWait')
                 this.addList = []
-                console.log('san')
+                // console.log('san')
             })
         }
         if(this.todoWhich == 'todoDoing') {
@@ -176,7 +190,16 @@ export default {
                 this.textVal = title
                 this.addItem()
             })
+            // 从完成卡片组中删除（移动到回收站）
+            this.$bus.$on('todoFinish', (index) => {
+                var arr =JSON.parse(window.localStorage.getItem('todoFinish'))
+                arr.splice(index,1)
+                window.localStorage.setItem('todoFinish', JSON.stringify(arr))
+                this.$bus.$emit('updateTodoList', 'todoFinish')
+                this.relist = this.getList(this.todoFinish)
+            })
         }
+
     }
 }
 </script>

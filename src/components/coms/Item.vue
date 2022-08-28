@@ -6,18 +6,23 @@
             <div class="sym-pan">🖊️</div>
         </div>
         <div class="box-list" v-show="showList">
-            <div class="move-box" v-if="!(todoWhich == 'todoFinish')">
-                <div class="move-btn" @click="moveTo" >移动 > </div>
-                <transition name="appear" appear>
-                    <div class="move-shadow" v-show="moveShow">
-                        <div class="wait" v-if="todoWhich == 'todoDoing'" @click="moveToWait">待办</div>
-                        <div class="doing" v-if="todoWhich == 'todoWait'" @click="moveToDoing">进行中</div>
-                        <div class="finish" @click="moveToFinish">完成</div>
-                    </div>
-                </transition>
+            <div v-if="!(todoWhich == 'todoRecovery')">
+                <div class="move-box" v-if="!(todoWhich == 'todoFinish')">
+                    <div class="move-btn" @click="moveTo" >移动 > </div>
+                    <transition name="appear" appear>
+                        <div class="move-shadow" v-show="moveShow">
+                            <div class="wait" v-if="todoWhich == 'todoDoing'" @click="moveToWait">待办</div>
+                            <div class="doing" v-if="todoWhich == 'todoWait'" @click="moveToDoing">进行中</div>
+                            <div class="finish" @click="moveToFinish">完成</div>
+                        </div>
+                    </transition>
+                </div>
+                <div class="edit-btn">编辑</div>
+                <div class="delete-btn" v-if="!(todoWhich == 'todoDoing')" @click="todoDel">删除</div>
             </div>
-            <div class="edit-btn">编辑</div>
-            <div class="delete-btn" v-if="!(todoWhich == 'todoDoing')">删除</div>
+            <div v-else>
+                <div class="deepDel">彻底删除</div>
+            </div>
         </div>
     </div>
 </template>
@@ -51,7 +56,6 @@ export default {
             }
             else this.$bus.$emit('moveToDoing', this.text, this.index)
             this.$bus.$emit('deleteWait', this.index)
-            console.log(this.index)
             this.choiceBtn()
         },
         moveToFinish() {
@@ -64,6 +68,20 @@ export default {
             if(this.min == undefined)this.whetherShow =  false
             else if(this.min == 0 && this.hour == 0) this.whetherShow =  false
             else this.whetherShow = true
+        },
+        todoDel() {
+            // 添加到回收站
+            var sto = window.localStorage
+            var todoR = []
+            if(sto.getItem('todoRecovery') == null)sto.setItem('todoRecovery', [])
+            if(sto.getItem('todoRecovery') != '')
+            todoR = JSON.parse(sto.getItem('todoRecovery'))
+            todoR.unshift(this.text)
+            window.localStorage.setItem('todoRecovery', JSON.stringify(todoR))
+            // 删除本任务
+            if(this.todoWhich == 'todoWait')this.$bus.$emit('deleteWait', this.index)
+            if(this.todoWhich == 'todoFinish')this.$bus.$emit('todoFinish', this.index)
+            this.choiceBtn()
         }
     },
     data() {
@@ -121,11 +139,12 @@ export default {
     /* background-color: rbga(0,0,0,.7); */
 }
 
+.deepDel,
 .edit-btn,
 .move-btn,
 .delete-btn {
     position: relative;
-    right: 0;
+    right: -10px;
     background-color: rgba(0,0,0,.6);
     margin-bottom: 3px;
     padding: 4px 8px ;
@@ -133,10 +152,11 @@ export default {
     cursor: pointer;
 }
 
+.deepDel:hover,
 .edit-btn:hover,
 .move-btn:hover,
 .delete-btn:hover {
-    right: -5px;
+    right: -15px;
     transition: .5s;
 }
 
