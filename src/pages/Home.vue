@@ -1,7 +1,7 @@
 <template>
     <div id="Home">
 
-        <home-header></home-header>
+        <home-header title="回收站"></home-header>
         <home-main></home-main>
         <div class="shadow-show" v-show="shadowShow"></div>
     </div>
